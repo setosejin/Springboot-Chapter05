@@ -6,6 +6,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import java.util.Date;
 import java.util.List;
@@ -15,7 +19,8 @@ public class QueryMethodTest {
     @Autowired
     private BoardRepository boardRepository;
 
-    /*@BeforeEach
+    /*
+    @BeforeEach
     public void dataPrepare() {
         for (int i = 1; i <= 200; i++) {
             Board board = new Board();
@@ -35,7 +40,7 @@ public class QueryMethodTest {
         for (Board board : boardList) {
             System.out.println("---> " + board.toString());
         }
-    }*/
+    }
 
     @Test
     public void testByContentContaining() {
@@ -45,4 +50,59 @@ public class QueryMethodTest {
             System.out.println("---> " + board.toString());
         }
     }
+
+    @Test
+    public void testFindByTitleContainingOrContentContaining() {
+        List<Board> boardList = boardRepository.findByTitleContainingOrContentContaining("17", "17");
+        System.out.println("검색 결과");
+        for (Board board : boardList) {
+            System.out.println("---> " + board.toString());
+        }
+    }
+
+    @Test
+    public void testFindByTitleContainingOrderBySeqDesc() {
+        List<Board> boardList = boardRepository.findByTitleContainingOrderBySeqDesc("17");
+        System.out.println("검색 결과");
+        for (Board board : boardList) {
+            System.out.println("---> " + board.toString());
+        }
+    }
+
+    @Test
+    public void testFindByTitleContaining() {
+        Pageable paging = PageRequest.of(0, 5);
+        List<Board> boardList = boardRepository.findByTitleContaining("제목", paging);
+        System.out.println("검색 결과");
+        for (Board board : boardList) {
+            System.out.println("---> " + board.toString());
+        }
+    }
+
+    @Test
+    public void testFindByTitleContaining() {
+        Pageable paging = PageRequest.of(0, 5, Sort.Direction.DESC, "seq");
+        List<Board> boardList = boardRepository.findByTitleContaining("제목", paging); // List 형식
+        System.out.println("검색 결과");
+        for (Board board : boardList) {
+            System.out.println("---> " + board.toString());
+        }
+    }
+*/
+    @Test
+    public void testFindByTitleContaining() {
+        Pageable paging = PageRequest.of(0, 5, Sort.Direction.DESC, "seq");
+        //Pageable paging = PageRequest.of(0, 10, Sort.Direction.DESC, "seq"); //추후 추가
+        Page<Board> pageInfo = boardRepository.findByTitleContaining("제목", paging); // Page 형식s
+        System.out.println("PAGE SIZE : " + pageInfo.getSize());
+        System.out.println("TOTAL PAGES : " + pageInfo.getTotalPages());
+        System.out.println("TOTAL COUNT : " + pageInfo.getTotalElements());
+        System.out.println("NEXT : " + pageInfo.nextPageable());
+        List<Board> boardList = pageInfo.getContent();
+        System.out.println("검색 결과");
+        for (Board board : boardList) {
+            System.out.println("---> " + board.toString());
+        }
+    }
+
 }
