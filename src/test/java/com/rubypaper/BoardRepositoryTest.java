@@ -16,7 +16,7 @@ public class BoardRepositoryTest {
     @Test
     public void testInsertBoard() {
         Board board = new Board();
-        board.setTitle("두 번째 게시글");
+        board.setTitle("첫 번째 게시글");
         board.setWriter("테스터");
         board.setContent("잘 등록됩니다");
         board.setCreateDate(new Date());

@@ -15,7 +15,7 @@ public class QueryMethodTest {
     @Autowired
     private BoardRepository boardRepository;
 
-    @BeforeEach
+    /*@BeforeEach
     public void dataPrepare() {
         for (int i = 1; i <= 200; i++) {
             Board board = new Board();
@@ -31,6 +31,15 @@ public class QueryMethodTest {
     @Test
     public void testFindByTitle() {
         List<Board> boardList = boardRepository.findByTitle("테스트 제목 10");
+        System.out.println("검색 결과");
+        for (Board board : boardList) {
+            System.out.println("---> " + board.toString());
+        }
+    }*/
+
+    @Test
+    public void testByContentContaining() {
+        List<Board> boardList = boardRepository.findByContentContaining("17");
         System.out.println("검색 결과");
         for (Board board : boardList) {
             System.out.println("---> " + board.toString());
